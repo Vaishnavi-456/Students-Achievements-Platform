@@ -1,0 +1,355 @@
+{% extends "student/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .certificates-container {
+        padding: 2rem 0;
+    }
+
+    .section-header {
+        background: linear-gradient(135deg, #60a5fa, #3b82f6);
+        padding: 2rem 0;
+        color: white;
+        border-radius: 0 0 30px 30px;
+        margin-bottom: 3rem;
+        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
+        text-align: center;
+    }
+
+    .certificates-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.5rem;
+        padding: 1rem 0;
+    }
+
+    .certificate-card {
+        position: relative;
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .certificate-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .certificate-content {
+        padding: 1.5rem;
+    }
+
+    .certificate-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+    }
+
+    .certificate-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .meta-item i {
+        color: var(--primary-color);
+        width: 16px;
+    }
+
+    .certificate-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .btn-download {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #60a5fa, #3b82f6);
+        color: white;
+        border: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-download:hover {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        transform: translateY(-2px);
+        color: white;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    }
+
+    .filter-tabs {
+        background: white;
+        padding: 1rem;
+        border-radius: 16px;
+        display: flex;
+        gap: 1rem;
+        margin: -2rem auto 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        max-width: 800px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        position: relative;
+        z-index: 1;
+    }
+
+    .filter-tab {
+        padding: 0.75rem 1.5rem;
+        border-radius: 20px;
+        background: var(--background-color);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .filter-tab:hover {
+        background: #f1f5f9;
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .filter-tab.active {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .certificate-type-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        z-index: 1;
+    }
+
+    .badge-event {
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--primary-color);
+    }
+
+    .badge-workshop {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--secondary-color);
+    }
+
+    .badge-competition {
+        background: rgba(139, 92, 246, 0.1);
+        color: var(--accent-color);
+    }
+
+    .no-certificates {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 3rem;
+        background: white;
+        border-radius: 16px;
+        color: var(--text-secondary);
+    }
+
+    @media (max-width: 768px) {
+        .filter-tabs {
+            padding: 0.75rem;
+            gap: 0.5rem;
+            margin: -1rem 1rem 2rem;
+        }
+
+        .filter-tab {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .certificates-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container certificates-container">
+    <div class="section-header">
+        <h2>My Certificates</h2>
+        <p class="text-muted">View and download your achievement certificates</p>
+    </div>
+
+    <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">All Certificates</button>
+        <button class="filter-tab" data-filter="events">Events</button>
+        <button class="filter-tab" data-filter="workshops">Workshops</button>
+        <button class="filter-tab" data-filter="competitions">Competitions</button>
+    </div>
+    {%if messages%}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="certificates-grid">
+        {% for event_cert in events %}
+        <div class="certificate-card" data-type="events">
+            <div class="certificate-content">
+                <span class="certificate-type-badge badge-event">Event</span>
+                <h3 class="certificate-title">{{ event_cert.event.name }}</h3>
+                <div class="certificate-meta">
+                   <!-- <div class="meta-item">
+                        <i class="far fa-calendar-alt"></i>
+                        <span>Issued on {{ event_cert.created_at|date:"M d, Y" }}</span>
+                    </div>-->
+                    <div class="meta-item">
+                        <i class="fas fa-building"></i>
+                        <span>{{ event_cert.event.organization.name }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-certificate"></i>
+                        <span>Certificate ID: {{ event_cert.participation_id }}</span>
+                    </div>
+                </div>
+                <div class="certificate-actions">
+                    <a href="{% url 'student:download_certificate' event_cert.participation_id %}" class="btn btn-primary">
+                        Download 
+                    </a>
+                    <a href="{% url 'student:certificate_details' event_cert.participation_id %}" class="btn-download">
+                        <i class="fas fa-eye me-2"></i>View
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for workshop_cert in workshops %}
+        <div class="certificate-card" data-type="workshops">
+            <div class="certificate-content">
+                <span class="certificate-type-badge badge-workshop">Workshop</span>
+                <h3 class="certificate-title">{{ workshop_cert.workshop.name }}</h3>
+                <div class="certificate-meta">
+                 <!--   <div class="meta-item">
+                        <i class="far fa-calendar-alt"></i>
+                        <span>Issued on {{ workshop_cert.created_at|date:"M d, Y" }}</span>
+                    </div>-->
+                    <div class="meta-item">
+                        <i class="fas fa-building"></i>
+                        <span>{{ workshop_cert.workshop.organization.name }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-certificate"></i>
+                        <span>Certificate ID: {{ workshop_cert.participation_id }}</span>
+                    </div>
+                </div>
+                <div class="certificate-actions">
+                    <a href="{% url 'student:download_certificate' workshop_cert.participation_id %}" class="btn btn-primary">
+                        Download 
+                    </a>
+                    <a href="{% url 'student:certificate_details' workshop_cert.participation_id %}" class="btn-download">
+                        <i class="fas fa-eye me-2"></i>View
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for competition_cert in competitions %}
+        <div class="certificate-card" data-type="competitions">
+            <div class="certificate-content">
+                <span class="certificate-type-badge badge-competition">Competition</span>
+                <h3 class="certificate-title">{{ competition_cert.compitition.name }}</h3>
+                <div class="certificate-meta">
+                  <!--  <div class="meta-item">
+                        <i class="far fa-calendar-alt"></i>
+                        <span>Issued on {{ competition_cert.created_at|date:"M d, Y" }}</span>
+                    </div>-->
+                    <div class="meta-item">
+                        <i class="fas fa-building"></i>
+                        <span>{{ competition_cert.compitition.organization.name }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-certificate"></i>
+                        <span>Certificate ID: {{ competition_cert.participation_id }}</span>
+                    </div>
+                </div>
+                <div class="certificate-actions">
+                    <a href="{% url 'student:download_certificate' competition_cert.participation_id %}" class="btn btn-primary">
+                        Download 
+                    </a>
+                    <a href="{% url 'student:certificate_details' competition_cert.participation_id %}" class="btn-download">
+                        <i class="fas fa-eye me-2"></i>View
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% if not events and not workshops and not competitions %}
+        <div class="no-certificates">
+            <i class="fas fa-certificate fa-3x mb-3 text-muted"></i>
+            <h4>No Certificates Yet</h4>
+            <p class="text-muted">Participate in events, workshops, or competitions to earn certificates</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const certificates = document.querySelectorAll('.certificate-card');
+
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove active class from all tabs
+            filterTabs.forEach(t => t.classList.remove('active'));
+            // Add active class to clicked tab
+            tab.classList.add('active');
+
+            const filterValue = tab.dataset.filter;
+
+            certificates.forEach(cert => {
+                if (filterValue === 'all' || cert.dataset.type === filterValue) {
+                    cert.style.display = '';
+                } else {
+                    cert.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

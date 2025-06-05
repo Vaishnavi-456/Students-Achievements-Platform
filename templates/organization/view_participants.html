@@ -1,0 +1,78 @@
+{% extends "organization/base.html" %}
+{% load static %}
+{% block body %}
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-lg-12">
+                <h4 class="page-title">View Participation</h4>
+            </div>
+            <div class="col-8 sm-8 col-9 text-right m-b-20">
+                <a href="{% url 'organization:add_event' %}" class="btn btn-primary btn-rounded float-left">
+                    <i class="fa fa-plus"></i>
+                    {%if event_mode == 1%} Add Workshop
+                    {%elif event_mode == 2%} Add Event
+                    {%else%} Add Compitition
+                    {%endif%}
+                </a>
+            </div>
+        </div>
+        {% if message%}
+            <div class="alert alert-success" role="alert">
+                {{message}}
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Event Name</th>
+                                        <th>Student Name</th>
+                                        <th>Event Date</th>
+                                        <th>Organized By</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {%if event_mode == 1%}
+                                        {%for participant in participants%}
+                                            <tr>
+                                                <td>{{participant.workshop.name}}</td>
+                                                <td>{{participant.student.first_name}}</td>
+                                                <td>{{participant.workshop.date}}</td>
+                                                <td>{{participant.workshop.organization.name}}</td>
+                                            </tr>
+                                        {%endfor%}
+                                    {%elif event_mode == 2%}
+                                        {%for participant in participants%}
+                                            <tr>
+                                                <td>{{participant.event.name}}</td>
+                                                <td>{{participant.student.first_name}}</td>
+                                                <td>{{participant.event.date}}</td>
+                                                <td>{{participant.event.organization.name}}</td>
+                                            </tr>
+                                        {%endfor%}
+                                    {%else%}
+                                        {%for participant in participants%}
+                                            <tr>
+                                                <td>{{participant.compitition.name}}</td>
+                                                <td>{{participant.student.first_name}}</td>
+                                                <td>{{participant.compitition.date}}</td>
+                                                <td>{{participant.compitition.organization.name}}</td>
+                                            </tr>
+                                        {%endfor%}
+                                    {%endif%}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

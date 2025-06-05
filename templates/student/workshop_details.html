@@ -1,0 +1,169 @@
+{% extends "student/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .event-header {
+        background: linear-gradient(135deg, #60a5fa, #3b82f6);
+        padding: 4rem 0;
+        color: white;
+        margin-bottom: 2rem;
+    }
+
+    .event-details-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+    }
+
+    .event-info {
+        padding: 2rem;
+    }
+
+    .event-meta {
+        display: flex;
+        margin: 1.5rem 0;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #6b7280;
+    }
+
+    .registration-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        position: sticky;
+        top: 100px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-register {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(135deg, #60a5fa, #3b82f6);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(59, 130, 246, 0.2);
+    }
+
+    .organizer-info {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .description {
+        line-height: 1.8;
+        color: #4b5563;
+    }
+
+    .requirements-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .requirements-list li {
+        padding: 0.5rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .requirements-list li::before {
+        content: '•';
+        color: #3b82f6;
+        position: absolute;
+        left: 0;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="event-header">
+    <div class="container">
+        <h1 class="mb-3">{{ workshop.name }}</h1>
+        <div class="event-meta">
+            <div class="meta-item">
+                <i class="far fa-calendar-alt"></i>
+                <span>{{ workshop.date }}</span>
+            </div>
+            <div class="meta-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>{{ workshop.location }}</span>
+            </div>
+            <div class="meta-item">
+                <i class="fas fa-users"></i>
+                <span>{{ workshop.registration_count }} participants</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="event-details-card">
+                <div class="event-info">
+                    <h3>About This Workshop</h3>
+                    <p class="description">{{ workshop.description }}</p>
+
+                    <div class="mt-4">
+                        <h4>Workshop Schedule</h4>
+                        <p>{{ workshop.time }}</p>
+                    </div>
+
+                    <div class="mt-4">
+                        <h4>Requirements</h4>
+                        <ul class="requirements-list">
+                            <li>Valid college ID card</li>
+                            <li>Laptop (if specified)</li>
+                            <li>Pre-requisite knowledge (if any)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="registration-card">
+                <h4>Registration Details</h4>
+                <div class="meta-item mt-3 mb-3">
+                    <i class="fas fa-clock"></i>
+                    <span>Registration closes in 2 days</span>
+                </div>
+
+                {% if not is_registered %}
+                <form method="POST" action="{% url 'student:register_workshop' workshop.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-register">
+                        Register Now
+                    </button>
+                </form>
+                {% else %}
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    You're registered for this event
+                </div>
+                {% endif %}
+
+                <div class="organizer-info">
+                    <h5>Organized by</h5>
+                    <p class="mb-0">{{ workshop.organization.name }}</p>
+                    <small class="text-muted">{{ workshop.organization.email }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

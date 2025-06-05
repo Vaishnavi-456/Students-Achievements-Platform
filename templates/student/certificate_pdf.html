@@ -1,0 +1,117 @@
+<!-- templates/student/certificate_pdf.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Certificate of {{ certificate_type }} Participation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            color: #333;
+        }
+        .certificate {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+            border: 15px solid #3B82F6;
+            position: relative;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #3B82F6;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 24px;
+            color: #6B7280;
+        }
+        .content {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .recipient {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .description {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 80px;
+        }
+        .signature {
+            text-align: center;
+            width: 200px;
+        }
+        .signature-line {
+            width: 100%;
+            border-top: 1px solid #333;
+            margin-bottom: 10px;
+        }
+        .meta {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            color: #6B7280;
+        }
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate">
+        <div class="header">
+            <div class="title">Certificate of Participation</div>
+            <div class="subtitle">{{ certificate_type }}</div>
+        </div>
+        
+        <div class="content">
+            <p>This is to certify that</p>
+            <div class="recipient">{{ student.first_name }} {{ student.last_name }}</div>
+            <p class="description">
+                has successfully participated in the {{ certificate_type }} <br/>
+                <strong>"{{ event_name }}"</strong> <br/>
+                organized by {{ organization_name }} <br/>
+                on {{ event_date|date:"F d, Y" }}
+            </p>
+        </div>
+        
+        <div class="footer">
+            <div class="signature">
+                <div class="signature-line"></div>
+                <p>Event Coordinator</p>
+            </div>
+            <div class="signature">
+                <div class="signature-line"></div>
+                <p>{{ organization_name }}</p>
+            </div>
+        </div>
+        
+        <div class="meta">
+            Certificate ID: {{ certificate_id }} | Issue Date: {{ issue_date|date:"F d, Y" }}
+        </div>
+    </div>
+</body>
+</html>

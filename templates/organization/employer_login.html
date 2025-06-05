@@ -1,0 +1,62 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- login23:11-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico'%}">
+    <title>Doctor Login</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css'%}">
+    <!--[if lt IE 9]>
+		<script src="{% static 'js/html5shiv.min.js'%}"></script>
+		<script src="{% static 'js/respond.min.js'%}"></script>
+	<![endif]-->
+</head>
+
+<body>
+    <div class="main-wrapper account-wrapper">
+        <div class="account-page">
+			<div class="account-center">
+                <h5 class="account-title">Doctor Login</h5>
+				<div class="account-box">
+                    <form action="{% url 'doctor_pannel'%}" class="form-signin">
+                        {% csrf_token %}
+						<div class="account-logo">
+                            <a href="index-2.html"><img src="{% static 'img/logo-dark.png'%}" alt=""></a>
+                        </div>
+                        <div class="form-group">
+                            <label>Username or Email</label>
+                            <input type="text" autofocus="" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control">
+                        </div>
+                        <div class="form-group text-right">
+                            <a href="forgot-password.html">Forgot your password?</a>
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary account-btn">Login</button>
+                        </div>
+                        {% comment %} <div class="text-center register-link">
+                            Don’t have an account? <a href="">Register Now</a>
+                        </div> {% endcomment %}
+                    </form>
+                </div>
+			</div>
+        </div>
+    </div>
+    <script src="{% static 'js/jquery-3.2.1.min.js'%}"></script>
+	<script src="{% static 'js/popper.min.js'%}"></script>
+    <script src="{% static 'js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'js/app.js'%}"></script>
+</body>
+
+
+<!-- login23:12-->
+</html> 

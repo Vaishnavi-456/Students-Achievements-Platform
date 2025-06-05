@@ -1,0 +1,298 @@
+{% extends "student/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    /* Keep only styles specific to home page that aren't in base.html */
+    .section {
+        padding: 4rem 0;
+    }
+    
+    .section-dark {
+        background-color: #f8fafc;
+    }
+    
+    .section-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1.1rem;
+        color: #6b7280;
+    }
+    
+    /* Override card width for home page */
+    .home-category-row .event-card {
+        min-width: 380px !important;
+        max-width: 380px !important;
+    }
+    
+    .home-category-row {
+        display: flex;
+        gap: 1.5rem;
+        overflow-x: auto;
+        padding: 0.5rem 0;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .home-category-row::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* Navigation for horizontal scrolling */
+    .navigation-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    
+    .nav-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid #e5e7eb;
+        background: white;
+        color: #1f2937;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-btn:hover {
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+    }
+    
+    .nav-btn.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+
+<!-- Events Section -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Featured Events</h2>
+            <p class="section-subtitle">Discover upcoming events and opportunities</p>
+        </div>
+        <div class="category-container">
+            <div class="home-category-row" id="events-row">
+                {% for event in events %}
+                <div class="event-card gradient-card">
+                    {% if event.date >= today %}
+                    <span class="event-status status-upcoming">Upcoming</span>
+                    {% else %}
+                    <span class="event-status status-past">Past</span>
+                    {% endif %}
+                    <div class="event-content">
+                        <h3 class="event-title">{{ event.name }}</h3>
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="far fa-calendar-alt"></i>
+                                <span>{{ event.date }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>{{ event.location }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-users"></i>
+                                <span>{{ event.participants_count }} participants</span>
+                            </div>
+                            <p class="text-muted mb-4">{{ event.description|truncatewords:15 }}</p>
+                        </div>
+                        <a href="{% url 'student:event_details' event.id %}" class="btn btn-view-details">
+                            <i class="fas fa-arrow-right me-2"></i> View Details
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center">
+                    <p class="text-muted">No events available at the moment.</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="navigation-buttons">
+                <button class="nav-btn prev-btn" data-target="events-row">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-btn next-btn" data-target="events-row">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Workshops Section -->
+<section class="section section-dark">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Workshops</h2>
+            <p class="section-subtitle">Enhance your skills with hands-on workshops</p>
+        </div>
+        {% if not workshops %}
+        <div class="col-12 text-center">
+            <p class="text-muted">No workshops available at the moment.</p>
+        </div>
+        {% else %}
+        <div class="category-container">
+            <div class="home-category-row" id="workshops-row">
+                {% for workshop in workshops %}
+                <div class="event-card gradient-card">
+                    {% if workshop.date >= today %}
+                    <span class="event-status status-upcoming">Upcoming</span>
+                    {% else %}
+                    <span class="event-status status-past">Past</span>
+                    {% endif %}
+                    <div class="event-content">
+                        <h3 class="event-title">{{ workshop.name }}</h3>
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="far fa-calendar-alt"></i>
+                                <span>{{ workshop.date }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>{{ workshop.location }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-user-tie"></i>
+                                <span>{{ workshop.instructor }}</span>
+                            </div>
+                            <p class="text-muted mb-4">{{ workshop.description|truncatewords:15 }}</p>
+                        </div>
+                        <a href="{% url 'student:workshop_details' workshop.id %}" class="btn btn-view-details">
+                            <i class="fas fa-arrow-right me-2"></i> View Details
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}                
+            </div>
+            <div class="navigation-buttons">
+                <button class="nav-btn prev-btn" data-target="workshops-row">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-btn next-btn" data-target="workshops-row">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        {%endif%}
+    </div>
+</section>
+
+<!-- Competitions Section -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Competitions</h2>
+            <p class="section-subtitle">Participate in exciting competitions</p>
+        </div>
+        {% if not compititions %}
+        <div class="col-12 text-center">
+            <p class="text-muted">No competitions available at the moment.</p>
+        </div>
+        {% else %}
+        <div class="category-container">
+            <div class="home-category-row" id="competitions-row">
+                {% for competition in compititions %}
+                <div class="event-card gradient-card">
+                    {% if competition.date >= today %}
+                    <span class="event-status status-upcoming">Upcoming</span>
+                    {% else %}
+                    <span class="event-status status-past">Past</span>
+                    {% endif %}
+                    <div class="event-content">
+                        <h3 class="event-title">{{ competition.name }}</h3>
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="far fa-calendar-alt"></i>
+                                <span>{{ competition.date }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>{{ competition.location }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-trophy"></i>
+                                <span>Prize: {{ competition.prize }}</span>
+                            </div>
+                            <p class="text-muted mb-4">{{ competition.description|truncatewords:15 }}</p>
+                        </div>
+                        <a href="{% url 'student:compitition_details' competition.id %}" class="btn btn-view-details">
+                            <i class="fas fa-arrow-right me-2"></i> View Details
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="navigation-buttons">
+                <button class="nav-btn prev-btn" data-target="competitions-row">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-btn next-btn" data-target="competitions-row">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        {%endif%}
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.home-category-row').forEach(row => {
+            const container = row.parentElement;
+            const prevBtn = container.querySelector('.prev-btn');
+            const nextBtn = container.querySelector('.next-btn');
+
+            const updateNavButtons = () => {
+                prevBtn.classList.toggle('disabled', row.scrollLeft <= 0);
+                nextBtn.classList.toggle('disabled', 
+                    row.scrollLeft >= row.scrollWidth - row.clientWidth - 5);
+            };
+
+            row.addEventListener('scroll', updateNavButtons);
+            window.addEventListener('resize', updateNavButtons);
+            updateNavButtons();
+
+            prevBtn.addEventListener('click', () => {
+                if (!prevBtn.classList.contains('disabled')) {
+                    row.scrollBy({
+                        left: -400,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (!nextBtn.classList.contains('disabled')) {
+                    row.scrollBy({
+                        left: 400,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

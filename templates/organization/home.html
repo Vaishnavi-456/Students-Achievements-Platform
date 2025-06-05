@@ -1,0 +1,59 @@
+{% extends "organization/base.html" %} 
+ 
+{%block body%}
+        <div class="page-wrapper">
+            <div class="content">
+                <h1>Employer Pannel</h1>
+                {%if messages%}
+                        {%for message in messages%}
+                            <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+                                {{message}}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {%endfor%}
+                    {%endif%}
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                        <div class="dash-widget">
+							{% comment %} <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span> {% endcomment %}
+							<div class="dash-widget-info text-right">
+								<h3>{{event_count}}</h3>
+								<span class="widget-title1">Events <i class="fa fa-check" aria-hidden="true"></i></span>
+							</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                        <div class="dash-widget">
+                            {% comment %} <span class="dash-widget-bg2"><i class="fa fa-user-o"></i></span> {% endcomment %}
+                            <div class="dash-widget-info text-right">
+                                <h3>{{workshop_count}}</h3>
+                                <span class="widget-title2">Workshops <i class="fa fa-check" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                        <div class="dash-widget">
+                            {% comment %} <span class="dash-widget-bg3"><i class="fa fa-user-md" aria-hidden="true"></i></span> {% endcomment %}
+                            <div class="dash-widget-info text-right">
+                                <h3>{{compitition_count}}</h3>
+                                <span class="widget-title3">Competitions <i class="fa fa-check" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                        <div class="dash-widget">
+                            
+                            <div class="dash-widget-info text-right">
+                                <h3>{{total_participants}}</h3>
+                                <span class="widget-title4">total Participation <i class="fa fa-check" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+				<div class="row">
+
+        </div>
+{%endblock%}

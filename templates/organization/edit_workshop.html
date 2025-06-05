@@ -1,0 +1,85 @@
+{% extends "organization/base.html" %}
+{% load static %}
+{%block head%}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{%endblock%}
+
+{% block body %}
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <h4 class="page-title">Update Workshop</h4>
+            </div>
+        </div>
+        {%if messages%}
+            {%for message in messages%}
+                <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {%endfor%}
+        {%endif%}
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <form method="post" action="{% url 'organization:edit_workshop' workshop.id %} ">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="name">Name <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text" id="name" name="name" value="{{workshop.name}}" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="Description">Description <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="description" name="description" required>{{workshop.description}}</textarea>
+                            </div>
+                        </div>
+                           
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="date">Date <span class="text-danger">*</span></label>
+                                <input class="form-control" type="date" id="date" name="date" value="{{workshop.date|date:'Y-m-d'}}" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="workshop_time">workshop Time <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text" id="workshop_time" name="time" value="{{workshop.time}}" placeholder="Enter workshop time" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="location">Location <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text" id="location" name="location" value="{{workshop.location}}" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <button class="btn btn-primary" type="submit">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        flatpickr("#workshop_time", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "h:i K",
+            time_24hr: false
+        });
+    </script>
+
+{% endblock %}

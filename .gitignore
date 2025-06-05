@@ -1,0 +1,33 @@
+# Bytecode and cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environment directories
+env/
+venv/
+ENV/
+.Python
+
+# Django-related files
+*.sqlite3
+db.sqlite3
+*.log
+*.pot
+*.mo
+*.swp
+*.egg-info/
+*.env
+
+# macOS system file
+*.DS_Store
+
+# IDE/editor specific files
+.vscode/
+.idea/
+
+# Static and media files
+staticfiles/
+media/

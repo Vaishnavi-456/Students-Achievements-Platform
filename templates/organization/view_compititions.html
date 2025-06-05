@@ -1,0 +1,87 @@
+{% extends "organization/base.html" %}
+{% load static %}
+{% block body %}
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-lg-12">
+                <h4 class="page-title">View Competitions</h4>
+            </div>
+            <div class="col-sm-8 col-9 text-right m-b-20">
+                <a href="{% url 'organization:add_compitition' %}" class="btn btn-primary btn-rounded float-left">
+                    <i class="fa fa-plus"></i> Add competition
+                </a>
+            </div>
+        </div>
+        {%if messages %}
+            {%for message in messages%}
+                <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {%endfor%}
+        {%endif%}
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    
+                    <div class="card-body">
+                        <div class="table-responsive">
+                           
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Date</th>
+                                        <th>Location</th>
+                                        <th>Organized By</th>
+                                        <th>Actions</th>
+                                        <th>Participants</th>
+                                        <th>Certificate</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {%for compitition in compititions%}
+                                    <tr>
+                                        <td>{{compitition.name}}</td>
+                                        <td>{{compitition.date}}</td>
+                                        <td>{{compitition.location}}</td>
+                                        <td>{{compitition.organization.name}}</td>
+                                        <td>
+                                            <a href="{% url 'organization:edit_compitition' compitition.id %}" class="btn btn-sm btn-primary">
+                                                Edit
+                                            </a>
+                                            <a href="{% url 'organization:delete_compitition' compitition.id %}" class="btn btn-sm btn-danger">
+                                                Delete
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'organization:view_compitition_participants' compitition.id %}" class="btn btn-sm btn-primary">
+                                                View Participants
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {%if compitition.certificate_generated%}
+                                                <span class="text-success">Certificate Already Generated</span>
+                                            {%else%}
+                                                <a href="{% url 'organization:generate_compitition_certificate' compitition.id %}" class="btn btn-sm btn-primary">
+                                                    Generate Certificate
+                                                </a>
+                                            {%endif%}   
+                                        </td>
+                                    </tr>
+                                    {%endfor%}                        
+                                </tbody>
+                               
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

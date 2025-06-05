@@ -1,0 +1,40 @@
+{% extends "organization/base.html" %}
+{% load static %}
+{% block body %}
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <h4 class="page-title">Generate Event Certificate</h4>
+                <form>
+                    <div class="form-group">
+                        <label for="event_name">Event Name <span class="text-danger">*</span></label>
+                        <select class="form-control" id="event_name" name="event_name" required>
+                            <option value="">Select Event</option>
+                            <option value="Health Conference">Health Conference</option>
+                            <option value="Medical Workshop">Medical Workshop</option>
+                            <option value="Wellness Seminar">Wellness Seminar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="participant_name">Participant Name <span class="text-danger">*</span></label>
+                        <input class="form-control" type="text" id="participant_name" name="participant_name" required>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Generate Certificate</button>
+                    </div>
+                </form>
+                {% comment %} <div class="certificate-template">
+                    <h2>Certificate of Participation</h2>
+                    <p>This is to certify that</p>
+                    <h3>[Participant Name]</h3>
+                    <p>has successfully participated in</p>
+                    <h3>[Event Name]</h3>
+                    <p>held on [Event Date] at [Event Location]</p>
+                    <p>Organized by [Organized By]</p>
+                </div> {% endcomment %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    {% load static %}
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+    <title>Employer Pannel</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    
+    <!--[if lt IE 9]>
+		<script src="{% static 'js/html5shiv.min.js'    %}"></script>
+		<script src="{% static 'js/respond.min.js'      %}"></script>
+	<![endif]-->
+    {%block head %}
+    {%endblock%}
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <div class="header">
+			<div class="header-left">
+				<a href="{% url 'organization:home'%}" class="logo">
+					{% comment %} <img src="{% static 'img/logo.png'%}" width="35" height="35" alt="">  {% endcomment %}
+                    <span>Portfolio Manager</span>
+				</a>
+			</div>
+            
+			<a id="toggle_btn" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
+            <a id="mobile_btn" class="mobile_btn float-left" href="#sidebar"><i class="fa fa-bars"></i></a>
+            <ul class="nav user-menu float-right">
+                
+                <li class="nav-item dropdown has-arrow">
+                    <a href="#" class="dropdown-toggle nav-link user-link" data-toggle="dropdown">
+                        <span class="user-img">
+							<img class="rounded-circle" src="{% static 'img/user.jpg'%}" width="24" alt="Admin">
+							<span class="status online"></span>
+						</span>
+                        
+                        <span>{{ session.organization_name | default:"Organization" }}</span>
+                    </a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="{% url 'organization:profile'%}">My Profile</a>
+						<a class="dropdown-item" href="{% url 'organization:edit_profile'%}">Edit Profile</a>
+						<a class="dropdown-item" href="{% url 'organization:change_password'%}">Change Password</a>
+						<a class="dropdown-item" href="{% url 'organization:logout'%}">Logout</a>
+					</div>
+                </li>
+            </ul>
+            <div class="dropdown mobile-user-menu float-right">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="{% url 'organization:profile'%}">My Profile</a>
+                    <a class="dropdown-item" href="{% url 'organization:edit_profile'%}">Edit Profile</a>
+                    <a class="dropdown-item" href="{% url 'organization:change_password'%}">Change Password</a>
+                    <a class="dropdown-item" href="{% url 'organization:logout'%}">Logout</a>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-inner slimscroll">
+                <div id="sidebar-menu" class="sidebar-menu">
+                    <ul>
+                        
+                        <li class="menu-title">Organization</li>
+                        <li>
+                            <a href="{% url 'organization:home'%}">
+                                {% comment %} <i class="fa fa-dashboard"></i>  {% endcomment %}
+                                <span>Dashboard</span></a>
+                        </li>
+                        <li class="menu-title">Events</li>
+						
+                        <li>
+                            <a href="{% url 'organization:view_events'%}">
+                                {% comment %} <i class="fa fa-wheelchair"></i>  {% endcomment %}
+                                <span>View event</span></a>
+                        </li>
+                        
+
+                        <li class="menu-title">Workshops</li>
+						
+                        <li>
+                            <a href="{% url 'organization:view_workshops'%}">
+                                {% comment %} <i class="fa fa-wheelchair"></i>  {% endcomment %}
+                                <span>View Workshops</span></a>
+                        </li>
+
+                        
+                      
+                        <li class="menu-title">Competitions</li>
+						
+                        <li>
+                            <a href="{% url 'organization:view_compititions'%}">
+                                {% comment %} <i class="fa fa-wheelchair"></i>  {% endcomment %}
+                                <span>View Competitions</span></a>
+                        </li>
+
+                        
+                        <li class="menu-title">Verification</li>
+
+                        <li>
+                            <a href="{% url 'organization:verify_certificate'%}">
+                                {% comment %} <i class="fa fa-heartbeat"></i>  {% endcomment %}
+                                <span>Verify certificate</span></a>
+                        </li>
+                               
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {%block body%}
+
+        {%endblock%}
+
+    </div>
+    <div class="sidebar-overlay" data-reff=""></div>
+    
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var currentUrl = window.location.pathname;
+        var menuItems = document.querySelectorAll('.sidebar-menu a');
+
+        menuItems.forEach(function(item) {
+            if (item.getAttribute('href') === currentUrl) {
+                item.classList.add('active');
+                item.closest('li').classList.add('active');
+            } else {
+                item.classList.remove('active');
+                item.closest('li').classList.remove('active');
+            }
+        });
+    });
+</script>
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.slimscroll.js' %}"></script>
+    <script src="{% static 'js/Chart.bundle.js' %}"></script>
+    <script src="{% static 'js/chart.js' %}"></script>
+    <script src="{% static 'js/app.js'%}"></script>
+
+</body>
+
+
+
+</html>

@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico'%}">
+    <title>student Registration</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css'%}">
+    <style>
+        .main-wrapper {
+            padding-top: 80px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: #f3f4f6;
+        }
+    
+        .register-container {
+            display: flex;
+            align-items: flex-center;
+            max-width: 1200px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .illustration-wrapper {
+            flex: 1;
+            padding: 3rem;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e6f3ff 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            min-height: 100%;
+        }
+
+        .illustration-text {
+            margin-bottom: 2rem;
+        }
+
+        .illustration-text h4 {
+            font-size: 1.75rem;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .illustration-text p {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .form-wrapper {
+            flex: 1.5;
+            padding: 3rem;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-primary {
+            padding: 0.75rem;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            border: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            color: #1f2937;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 992px) {
+            .register-container {
+                flex-direction: column;
+            }
+
+            .illustration-wrapper {
+                padding: 2rem;
+                position: relative;
+            }
+
+            .form-wrapper {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header-left">
+            <a href="{% url 'student:home'%}" class="logo">
+                <img src="{% static 'img/logonew1.png' %}" 
+         width="40" 
+         height="40" 
+         style="border-radius: 50%; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.2);" 
+         alt="Logo">
+    <span style="color: white; font-weight: 600; font-size: 20px;">Portfolio</span>
+            </a>
+        </div>
+    </div>
+    <div class="main-wrapper">
+        <div class="register-container">
+            <div class="illustration-wrapper">
+                <div class="illustration-text">
+                    <h4>Join Our Platform!</h4>
+                    <p>Register your student to start creating events and connect with students</p>
+                </div>
+                <dotlottie-player 
+                    src="https://lottie.host/8a16b02a-aa0b-4268-ae15-9a967a5bf929/REypjER3we.lottie"  
+                    background="transparent" 
+                    speed="1" 
+                    padding="auto"
+                    style="width: inherit; height:inherit" 
+                    loop 
+                    autoplay>
+                </dotlottie-player>
+            </div>
+            <div class="form-wrapper">
+                <h4 class="page-title">Register student</h4>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+              
+            <form method="post" id="formid" action="{% url 'student:register' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="first_name">First Name <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" id="first_name" name="first_name" {% if data.first_name%} value="{{data.first_name}}"{%endif%} placeholder="Enter First name" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="last_name">Last Name <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" id="last_name" name="last_name" {% if data.last_name%} value="{{data.last_name}}"{%endif%} placeholder="Enter Last name" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="email">Email <span class="text-danger">*</span></label>
+                            <input class="form-control" type="email" id="email" name="email" {% if data.email%} value="{{data.email}}"{%endif%} placeholder="Enter email" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="phone">Phone <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" id="phone" name="phone" {% if data.phone%} value="{{data.phone}}"{%endif%} placeholder="Enter phone number" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="password">Password <span class="text-danger">*</span></label>
+                            <input class="form-control" type="password" id="password" name="password" placeholder="Enter Password" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm_password <span class="text-danger">*</span></label>
+                            <input class="form-control" type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="college">College Name <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" id="college" name="college" {% if data.college%} value="{{data.college}}"{%endif%} placeholder="Enter First name" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="address">Address <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="address" name="address" {% if data.address%} value="{{data.address}}" {%endif%} placeholder="Enter address" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="city">City <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" id="city" name="city" {% if data.city%} value="{{data.city}}"{%endif%} placeholder="Enter city" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="state">State <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" id="state" name="state" {% if data.state%} value="{{data.state}}"{%endif%} placeholder="Enter state" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="zip_code">ZIP Code <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" id="zip_code" name="zip_code" {% if data.zip_code%} value="{{data.zip_code}}"{%endif%} placeholder="Enter zip code" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="country">Country <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" id="country" name="country" {% if data.country%} value="{{data.country}}"{%endif%} placeholder="Enter country" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    </div>
+                </div>
+            </form
+            <div class="text-center">
+                have an account? <a href="{% url 'student:login' %}">Login</a>
+            </div>>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/jquery-3.2.1.min.js'%}"></script>
+    <script src="{% static 'js/popper.min.js'%}"></script>
+    <script src="{% static 'js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'js/app.js'%}"></script>
+    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+</body>
+</html>

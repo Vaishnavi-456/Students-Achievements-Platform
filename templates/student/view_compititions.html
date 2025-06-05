@@ -1,0 +1,80 @@
+{% extends "student/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block body %}
+<div class="container events-container">
+    <div class="filters-section">
+        <form method="GET" class="search-box">
+            <div class="input-group">
+                <input type="text" 
+                       name="search" 
+                       class="form-control" 
+                       placeholder="Search competitions..."
+                       value="{{ search_query }}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+
+        <div class="filter-buttons">
+            <a href="?filter=all" class="filter-btn {% if current_filter == 'all' %}active{% endif %}">
+                All Competitions
+            </a>
+            <a href="?filter=upcoming" class="filter-btn {% if current_filter == 'upcoming' %}active{% endif %}">
+                Upcoming
+            </a>
+            <a href="?filter=past" class="filter-btn {% if current_filter == 'past' %}active{% endif %}">
+                Past
+            </a>
+
+        </div>
+    </div>
+
+    <div class="events-grid">
+        {% for competition in compititions %}
+        <div class="event-card gradient-card">
+            {% if competition.date >= today %}
+            <span class="event-status status-upcoming">Upcoming</span>
+            {% else %}
+            <span class="event-status status-past">Past</span>
+            {% endif %}
+            <div class="event-content">
+                <h3 class="event-title">{{ competition.name }}</h3>
+                <div class="event-meta">
+                    <div class="meta-item">
+                        <i class="far fa-calendar-alt"></i>
+                        <span>{{ competition.date }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>Prize: {{ competition.prize }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>{{ competition.location }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-users"></i>
+                        <span>{{ competition.participants_count }} participants</span>
+                    </div>
+                    <p class="text-muted mb-4">{{ competition.description|truncatewords:15 }}</p>
+                </div>
+                <a href="{% url 'student:compitition_details' competition.id %}" class="btn btn-view-details">
+                    <i class="fas fa-arrow-right me-2"></i> View Details
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-events">
+            <i class="fas fa-trophy fa-3x mb-3 text-muted"></i>
+            <h4>No competitions found</h4>
+            <p class="text-muted">Try adjusting your search or filters</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
