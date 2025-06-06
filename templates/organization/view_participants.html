@@ -41,7 +41,7 @@
                                         {%for participant in participants%}
                                             <tr>
                                                 <td>{{participant.workshop.name}}</td>
-                                                <td>{{participant.student.first_name}}</td>
+                                                <td>{{participant.student.first_name}}  {{ participant.student.last_name }}</td>
                                                 <td>{{participant.workshop.date}}</td>
                                                 <td>{{participant.workshop.organization.name}}</td>
                                             </tr>
@@ -50,7 +50,7 @@
                                         {%for participant in participants%}
                                             <tr>
                                                 <td>{{participant.event.name}}</td>
-                                                <td>{{participant.student.first_name}}</td>
+                                                <td>{{participant.student.first_name}}  {{ participant.student.last_name }}</td>
                                                 <td>{{participant.event.date}}</td>
                                                 <td>{{participant.event.organization.name}}</td>
                                             </tr>
@@ -59,7 +59,7 @@
                                         {%for participant in participants%}
                                             <tr>
                                                 <td>{{participant.compitition.name}}</td>
-                                                <td>{{participant.student.first_name}}</td>
+                                                <td>{{participant.student.first_name}}  {{ participant.student.last_name }}</td>
                                                 <td>{{participant.compitition.date}}</td>
                                                 <td>{{participant.compitition.organization.name}}</td>
                                             </tr>
