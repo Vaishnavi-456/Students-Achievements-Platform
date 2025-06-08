@@ -351,19 +351,84 @@ def register_compitition(request, compitition_id):
     pass
 
 
-def view_certificates(request):
-    if request.session['student_id'] is None:
-        return redirect('student:login')
-    student = Student.objects.get(email=request.session['student_id'])
-    event_certificates = Event_Participations.objects.filter(student=student)  
-    workshop_certificates = Workshop_Participations.objects.filter(student=student)
-    compitition_certificates = Compitition_Participations.objects.filter(student=student)
+# def view_certificates(request):
+#     if request.session['student_id'] is None:
+#         return redirect('student:login')
+#     student = Student.objects.get(email=request.session['student_id'])
+#     event_certificates = Event_Participations.objects.filter(student=student)  
+#     workshop_certificates = Workshop_Participations.objects.filter(student=student)
+#     compitition_certificates = Compitition_Participations.objects.filter(student=student)
     
-    certificates ={
+#     certificates ={
+#         'events': event_certificates,
+#         'workshops': workshop_certificates,
+#         'competitions': compitition_certificates
+#     }
+#     return render(request, 'student/view_certificates.html', certificates)
+# from datetime import datetime
+
+# def view_certificates(request):
+#     if not request.session.get('student_id'):
+#         return redirect('student:login')
+    
+#     student = Student.objects.get(email=request.session['student_id'])
+#     today = datetime.now().date()
+
+#     # Only fetch certificates of past or today's events
+#     event_certificates = Event_Participations.objects.filter(
+#         student=student,
+#         event__date__lte=today
+#     )
+#     workshop_certificates = Workshop_Participations.objects.filter(
+#         student=student,
+#         workshop__date__lte=today
+#     )
+#     compitition_certificates = Compitition_Participations.objects.filter(
+#         student=student,
+#         compitition__date__lte=today
+#     )
+
+#     certificates = {
+#         'events': event_certificates,
+#         'workshops': workshop_certificates,
+#         'competitions': compitition_certificates,
+#         'today': today
+#     }
+
+#     return render(request, 'student/view_certificates.html', certificates)
+
+from datetime import datetime
+
+def view_certificates(request):
+    if not request.session.get('student_id'):
+        return redirect('student:login')
+    
+    student = Student.objects.get(email=request.session['student_id'])
+    today = datetime.now().date()
+
+    event_certificates = Event_Participations.objects.filter(
+        student=student,
+        event__date__lte=today,
+        event__certificate_generated=True  # <-- Check event certificate
+    )
+    workshop_certificates = Workshop_Participations.objects.filter(
+        student=student,
+        workshop__date__lte=today,
+        workshop__certificate_generated=True  # <-- Check workshop certificate
+    )
+    compitition_certificates = Compitition_Participations.objects.filter(
+        student=student,
+        compitition__date__lte=today,
+        compitition__certificate_generated=True  # <-- Check competition certificate
+    )
+
+    certificates = {
         'events': event_certificates,
         'workshops': workshop_certificates,
-        'competitions': compitition_certificates
+        'competitions': compitition_certificates,
+        'today': today
     }
+
     return render(request, 'student/view_certificates.html', certificates)
 
 

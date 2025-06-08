@@ -236,31 +236,65 @@ def generate_compitition_certificate(request, compitition_id):
     return redirect('organization:view_compititions')
 
 
+# def verify_certificate(request):
+#     if request.method == 'POST':
+#         credential = request.POST.get('credential')
+#         if credential.startswith('E' or 'e'):
+#             event_mode = 1
+#             certificate = Event_Participations.objects.get(participation_id=credential)
+#             if certificate:
+#                 print(certificate)
+#                 return render(request, 'organization/certificate.html',{'certificate':certificate, 'event_mode':event_mode})
+        
+#         elif credential.startswith('W' or 'w'):
+#             event_mode = 2
+#             certificate = Workshop_Participations.objects.get(participation_id=credential)
+#             if certificate:
+#                 return render(request, 'organization/certificate.html',{'certificate':certificate, 'event_mode':event_mode})
+
+#         elif credential.startswith('C' or 'c'):
+#             event_mode = 3
+#             certificate = Compitition_Participations.objects.get(participation_id=credential)
+#             if certificate:
+#                 return render(request, 'organization/certificate.html',{'certificate':certificate, 'event_mode':event_mode})
+        
+#         messages.error(request, 'Invalid Credential')
+#         return render(request, 'organization/verify_certificate.html')
+#     return render(request, 'organization/verify_certificate.html')
+from django.core.exceptions import ObjectDoesNotExist
+
 def verify_certificate(request):
     if request.method == 'POST':
-        credential = request.POST.get('credential')
-        if credential.startswith('E' or 'e'):
-            event_mode = 1
-            certificate = Event_Participations.objects.get(participation_id=credential)
-            if certificate:
-                print(certificate)
-                return render(request, 'organization/certificate.html',{'certificate':certificate, 'event_mode':event_mode})
+        credential = request.POST.get('credential', '').strip()
         
-        elif credential.startswith('W' or 'w'):
-            event_mode = 2
-            certificate = Workshop_Participations.objects.get(participation_id=credential)
-            if certificate:
-                return render(request, 'organization/certificate.html',{'certificate':certificate, 'event_mode':event_mode})
+        if credential.lower().startswith('e'):
+            try:
+                certificate = Event_Participations.objects.get(participation_id=credential)
+                return render(request, 'organization/certificate.html', {'certificate': certificate, 'event_mode': 1})
+            except Event_Participations.DoesNotExist:
+                messages.error(request, 'No Event certificate found for this ID.')
 
-        elif credential.startswith('C' or 'c'):
-            event_mode = 3
-            certificate = Compitition_Participations.objects.get(participation_id=credential)
-            if certificate:
-                return render(request, 'organization/certificate.html',{'certificate':certificate, 'event_mode':event_mode})
+        elif credential.lower().startswith('w'):
+            try:
+                certificate = Workshop_Participations.objects.get(participation_id=credential)
+                return render(request, 'organization/certificate.html', {'certificate': certificate, 'event_mode': 2})
+            except Workshop_Participations.DoesNotExist:
+                messages.error(request, 'No Workshop certificate found for this ID.')
+
+        elif credential.lower().startswith('c'):
+            try:
+                certificate = Compitition_Participations.objects.get(participation_id=credential)
+                return render(request, 'organization/certificate.html', {'certificate': certificate, 'event_mode': 3})
+            except Compitition_Participations.DoesNotExist:
+                messages.error(request, 'No Competition certificate found for this ID.')
+
+        else:
+            messages.error(request, 'Invalid Credential Format.')
         
-        messages.error(request, 'Invalid Credential')
         return render(request, 'organization/verify_certificate.html')
+    
     return render(request, 'organization/verify_certificate.html')
+
 
 
 
